@@ -4,7 +4,7 @@ import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
 export const ruleName = 'IE11-Grid/no-auto-fill';
 
 export const messages = utils.ruleMessages(ruleName, {
-  expected: selector => `Unexpected use of auto-fill in ${selector}.`,
+  expected: selector => `IE11 does not support the use of auto-fill in ${selector}.`,
 });
 
 
