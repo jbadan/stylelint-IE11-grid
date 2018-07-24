@@ -4,11 +4,11 @@ import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
 export const ruleName = 'IE11-Grid/repeat';
 
 export const messages = utils.ruleMessages(ruleName, {
-  expected: selector => `IE11 does not support this use of repeat in ${selector}.`,
+  expected: selector => `Unexpected use of repeat in ${selector}. IE11 does not support repeat().`,
 });
 
 
-export default function(actual) {
+export default function(actual, _, context) {
   return (root, result) => {
     const validOptions = utils.validateOptions(result, ruleName, { actual });
 
@@ -33,9 +33,24 @@ export default function(actual) {
             o.type === 'decl' &&
             (o.prop.toLowerCase() === 'grid-template-columns' || o.prop.toLowerCase() === 'grid-template-rows') &&
             o.value.toLowerCase().includes('repeat')
+            //need to check if already includes -ms-grid-columns
           );
         });
+      //if --fix is enabled
+      if(isRejected && context.fix) {
+        //POSTCSS API
+          rule.parent.nodes.forEach(node => {
+            let value = node.nodes[0].value;
+            console.log(value)
+            var indexOfRepeat = value.indexOf('repeat');
+            console.log(indexOfRepeat)
+            //possibles:
+              //https://developer.mozilla.org/en-US/docs/Web/CSS/repeat
+            node.append({prop: '-ms-grid-columns', value: ''})
 
+          })
+      }
+      //returns rejected report
       if (isRejected) {
         utils.report({
           index: rule.lastEach,
