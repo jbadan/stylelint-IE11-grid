@@ -31,7 +31,7 @@ export default function(actual) {
         rule.nodes.some(o => {
           return (
             o.type === 'decl' &&
-            o.prop.toLowerCase() === 'grid-template-columns' &&
+            (o.prop.toLowerCase() === 'grid-template-columns'|| o.prop.toLowerCase() === 'grid-template-rows') &&
             o.value.toLowerCase().includes('repeat') &&
             o.value.toLowerCase().includes('auto-fill')
           );

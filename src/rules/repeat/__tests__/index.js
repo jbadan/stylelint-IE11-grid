@@ -59,6 +59,34 @@ testRule(rule, {
       message: messages.expected('.bar'),
       line: 1,
       column: 4,
+    },
+    {
+      description: 'grid-template-rows: repeat( auto-fit, minmax(250px, 1fr) );',
+      code: '.foo { grid-template-rows: repeat( auto-fit, minmax(250px, 1fr) ); }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 4,
+    },
+    {
+      description: 'grid-template-rows: REPEAT( auto-fit, MINMAX(250PX, 1FR) );',
+      code: '.bar { GRID-TEMPLATE-ROWS: REPEAT( auto-fit, MINMAX(250PX, 1FR) ); }',
+      message: messages.expected('.bar'),
+      line: 1,
+      column: 4,
+    },
+    {
+      description: 'grid-template-rows: repeat(auto-fit , 100px);',
+      code: '.bar { grid-template-rows: repeat(auto-fit , 100px); }',
+      message: messages.expected('.bar'),
+      line: 1,
+      column: 4,
+    },
+    {
+      description: 'grid-template-rows: repeat(3, 1fr);',
+      code: '.bar { grid-template-rows: repeat(3, 1fr); }',
+      message: messages.expected('.bar'),
+      line: 1,
+      column: 4,
     }
   ],
 });
