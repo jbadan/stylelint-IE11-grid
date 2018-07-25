@@ -118,9 +118,9 @@ testRule(rule, {
     //   column: 4,
     // },
     {
-      description: 'grid-template-columns: repeat(3, 1fr);',
-      code: '.bar { grid-template-columns: 1fr repeat 3, 20px 1fr; }',
-      fixed: '.bar { -ms-grid-columns: 1fr 20px 1fr [3]; grid-template-columns: 1fr repeat 3, 20px 1fr; }',
+      description: 'grid-template-columns: minmax(100px, max-content) repeat(3, 20px 1fr);',
+      code: '.bar { grid-template-columns: 1fr repeat(3, 20px 1fr) minmax(20, 1r) }',
+      fixed: '.bar { -ms-grid-columns: minmax(100px, max-content) (20px 1fr)[3]; grid-template-columns: minmax(100px, max-content) repeat(3, 1fr 20px); }',
       message: messages.expected('.bar'),
       line: 1,
       column: 4,

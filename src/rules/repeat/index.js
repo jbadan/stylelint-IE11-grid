@@ -40,13 +40,36 @@ export default function(actual, _, context) {
       if(isRejected && context.fix) {
         //POSTCSS API
           rule.parent.nodes.forEach(node => {
-            let value = node.nodes[0].value;
-            console.log(value)
-            var indexOfRepeat = value.indexOf('repeat');
-            console.log(indexOfRepeat)
-            //possibles:
-              //https://developer.mozilla.org/en-US/docs/Web/CSS/repeat
-            node.append({prop: '-ms-grid-columns', value: ''})
+            //find value of repeat
+            const reg = /(?<=repeat)([^\n\r]*)/gm;
+            let value = node.nodes[0].value.match(reg);
+            let repeat;
+            let repeatArr;
+            if (node.nodes[0].value.includes('minmax')) {
+                //split by some other means - otherwise minmax(25ch, 1fr) would be split at the wrong place
+                const reg2 = /(?<=minmax)([^\n\r]*)/gm;
+                let value2 = node.nodes[0].value.match(reg2);
+                console.log(value2)
+            } else {
+                repeat = value[0].replace(/[\,)(]/g, '');
+                repeatArr = repeat.split(' ');
+            }
+              //<auto-repeat> values - do not transform because IE11 does not support auto-repeat values
+              if (repeatArr[0] === ('auto-fit') || repeatArr[0] === ('auto-fill')) {
+                return node
+              } else {
+              //<track-repeat> values; <fixed-repeat> values
+                  //repeat(4, 250px)
+                  // repeat(4, [col-start] 250px [col-end])
+                  // repeat(4, [col-start] 60% [col-end])
+                  // repeat(4, [col-start] minmax(100px, 1fr) [col-end])
+                  // repeat(4, [col-start] fit-content(200px) [col-end])
+                  // repeat(4, 10px [col-start] 30% [col-middle] 400px [col-end])
+                  let numRepeats = repeatArr[0];
+                  let newArr = repeatArr.slice(1);
+                  newArr.join(' ');
+                 node.append({prop: '-ms-grid-columns', value: `(${newArr.join(' ')})[${numRepeats}]`});
+            }
 
           })
       }
